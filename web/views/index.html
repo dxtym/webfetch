@@ -1,13 +1,19 @@
-{{ block "index" . }}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
   </head>
   <body>
-    {{ template "main" . }}
+    <div hx-ext="ws" ws-connect="ws://localhost:6969/ws">
+      <ul>
+        <li id="os"></li>
+        <li id="uptime"></li>
+        <li id="cpu"></li>
+        <li id="mem"></li>
+      </ul>
+    </div>
   </body>
 </html>
-{{ end }}

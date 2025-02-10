@@ -15,13 +15,8 @@ const (
 	factor = bytes * bytes
 )
 
-type HostInfo struct {
-	OS     string
-	Uptime string
-}
-
-func GetHostInfo() (HostInfo, error) {
-	var out HostInfo
+func GetHostInfo() (string, error) {
+	out := ""
 	hostInfo, err := host.Info()
 	if err != nil {
 		return out, err
@@ -30,39 +25,31 @@ func GetHostInfo() (HostInfo, error) {
 	osys := strings.Title(hostInfo.OS)
 	platform := strings.Title(hostInfo.Platform)
 	arch := hostInfo.KernelArch
-	out.OS = fmt.Sprintf("%s %s %s", platform, osys, arch)
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#os">OS: %s %s %s</li>`, platform, osys, arch)
 
 	uptime := hostInfo.Uptime
 	duration := time.Duration(uptime) * time.Second
 	hours := int(duration.Hours()) % 24
 	minutes := int(duration.Minutes()) % 60
-	out.Uptime = fmt.Sprintf("%d hours, %d minutes", hours, minutes)
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#uptime">Uptime: %d hours, %d minutes</li>`, hours, minutes)
 
 	return out, nil
 }
 
-type CpuInfo struct {
-	Cpu   string
-}
-
-func GetCpuInfo() (CpuInfo, error) {
-	var out CpuInfo
+func GetCpuInfo() (string, error) {
+	out := ""
 	cpuInfo, err := cpu.Info()
 	if err != nil {
 		return out, err
 	}
 
-	out.Cpu = cpuInfo[0].ModelName
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#cpu">CPU: %s</li>`, cpuInfo[0].ModelName)
 
 	return out, nil
 }
 
-type MemInfo struct {
-	Mem string
-}
-
-func GetMemInfo() (MemInfo, error) {
-	var out MemInfo
+func GetMemInfo() (string, error) {
+	out := ""
 	mem, err := mem.VirtualMemory()
 	if err != nil {
 		return out, err
@@ -70,7 +57,7 @@ func GetMemInfo() (MemInfo, error) {
 
 	used := mem.Used / factor
 	total := mem.Total / factor
-	out.Mem = fmt.Sprintf("%dMB / %dMB", used, total)
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#mem">Memory: %dMB / %dMB</li>`, used, total)
 	
 	return out, nil
 }

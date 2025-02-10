@@ -1,59 +1,56 @@
 package server
 
 import (
-	"html/template"
-	"io"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/dxtym/zfetch/internal/specs"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"github.com/gorilla/websocket"
 )
 
-type Templates struct {
-	templates *template.Template
-}
-
-func (t *Templates) Render(w io.Writer, name string, data any, c echo.Context) error {
-	return t.templates.ExecuteTemplate(w, name, data)
-}
-
-type FetchInfo struct {
-	specs.HostInfo
-	specs.CpuInfo
-	specs.MemInfo
-}
+var upgrader = websocket.Upgrader{}
 
 func Run() {
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Renderer = &Templates{
-		templates: template.Must(template.ParseGlob("web/views/*.html")),
+	http.Handle("/", http.FileServer(http.Dir("web/views/")))
+	http.HandleFunc("/ws", handleUpdate)
+
+	log.Fatal(http.ListenAndServe(":6969", nil))
+}
+
+func handleUpdate(w http.ResponseWriter, r *http.Request) {
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println("upgrade: ", err)
+		return
 	}
+	defer conn.Close()
 
-	e.GET("/", func(c echo.Context) error {
-		var res FetchInfo
-
+	for {
 		host, err := specs.GetHostInfo()
 		if err != nil {
-			return c.Render(http.StatusInternalServerError, "error", err)
+			log.Println("host: ", err)
+			return
 		}
-		res.HostInfo = host
 
 		cpu, err := specs.GetCpuInfo()
 		if err != nil {
-			return c.Render(http.StatusInternalServerError, "error", err)
+			log.Println("cpu: ", err)
+			return
 		}
-		res.CpuInfo = cpu
 
 		mem, err := specs.GetMemInfo()
 		if err != nil {
-			return c.Render(http.StatusInternalServerError, "error", err)
+			log.Println("mem: ", err)
+			return
 		}
-		res.MemInfo = mem
 
-		return c.Render(http.StatusOK, "index", res)
-	})
+		msg := []byte(host + cpu + mem)
+		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+			log.Println("write: ", err)
+			return
+		}
 
-	e.Logger.Fatal(e.Start(":6969"))
+		time.Sleep(time.Second * 5)
+	}
 }

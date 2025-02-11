@@ -1,4 +1,4 @@
-module github.com/dxtym/zfetch
+module github.com/dxtym/minefetch
 
 go 1.23.5
 

@@ -1,7 +1,16 @@
 package main
 
-import "github.com/dxtym/zfetch/internal/server"
+import (
+	"context"
+	"log"
+
+	"github.com/dxtym/minefetch/internal/server"
+)
 
 func main() {
-	server.Run()
+	ctx := context.Background()
+
+	if err := server.Run(ctx); err != nil {
+		log.Fatalf("failed to run app: %s", err)
+	}
 }

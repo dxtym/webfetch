@@ -1,4 +1,8 @@
-* {
-  padding: 0;
-  margin: 0;
+@font-face {
+  font-family: 'Minecraftia';
+  src: url('../assets/minecraft.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Minecraftia', sans-serif;
 }

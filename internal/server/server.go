@@ -1,27 +1,44 @@
 package server
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 	"time"
 
-	"github.com/dxtym/zfetch/internal/specs"
+	"github.com/dxtym/minefetch/internal/specs"
 	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{}
 
-func Run() {
-	http.Handle("/", http.FileServer(http.Dir("web/views/")))
+func Run(ctx context.Context) error {
+	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt, os.Kill)
+	defer cancel()
+
+	http.Handle("/", http.FileServer(http.Dir("web/views")))
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("web/css"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("web/assets"))))
 	http.HandleFunc("/ws", handleUpdate)
 
-	log.Fatal(http.ListenAndServe(":6969", nil))
+	go func() {
+		log.Println("server listening on: :6969")
+		err := http.ListenAndServe(":6969", nil)
+		if err != nil {
+			log.Fatalf("failed to listen: %s\n", err)
+		}
+	}()
+
+	<-ctx.Done()
+	return ctx.Err()
 }
 
 func handleUpdate(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("upgrade: ", err)
+		log.Printf("failed to upgrade: %s\n", err)
 		return
 	}
 	defer conn.Close()
@@ -29,28 +46,28 @@ func handleUpdate(w http.ResponseWriter, r *http.Request) {
 	for {
 		host, err := specs.GetHostInfo()
 		if err != nil {
-			log.Println("host: ", err)
+			log.Printf("cannot obtain host: %s\n", err)
 			return
 		}
 
 		cpu, err := specs.GetCpuInfo()
 		if err != nil {
-			log.Println("cpu: ", err)
+			log.Printf("cannot obtain cpu: %s\n", err)
 			return
 		}
 
 		mem, err := specs.GetMemInfo()
 		if err != nil {
-			log.Println("mem: ", err)
+			log.Printf("cannot obtain mem: %s\n", err)
 			return
 		}
 
 		msg := []byte(host + cpu + mem)
 		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-			log.Println("write: ", err)
+			log.Printf("failed to write: %s\n", err)
 			return
 		}
 
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 3)
 	}
 }

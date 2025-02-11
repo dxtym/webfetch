@@ -1,4 +1,4 @@
 build:
-	@/snap/bin/go build -o tmp/main cmd/main.go
+	@/snap/bin/go build -o bin/main cmd/main.go
 
 .PHONY: build

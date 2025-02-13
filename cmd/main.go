@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/dxtym/minefetch/internal/server"
+	"github.com/dxtym/xifetch/internal/server"
 )
 
 func main() {

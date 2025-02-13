@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
-    <link rel="stylesheet" href="../css/styles.css">
-  </head>
-  <body>
-    <div hx-ext="ws" ws-connect="ws://localhost:6969/ws">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+</head>
+
+<body>
+  <div>
+    <div class="menu">
+      <div class="buttons close"></div>
+      <div class="buttons minimize"></div>
+      <div class="buttons zoom"></div>
+    </div>
+    <div class="screen" hx-ext="ws" ws-connect="ws://localhost:6969/ws">
       <ul>
         <li id="os"></li>
         <li id="uptime"></li>
@@ -16,5 +24,7 @@
         <li id="mem"></li>
       </ul>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

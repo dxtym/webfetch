@@ -1,4 +1,4 @@
-module github.com/dxtym/minefetch
+module github.com/dxtym/xifetch
 
 go 1.23.5
 

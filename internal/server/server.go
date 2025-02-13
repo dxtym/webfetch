@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/dxtym/minefetch/internal/specs"
+	"github.com/dxtym/xifetch/internal/specs"
 	"github.com/gorilla/websocket"
 )
 
@@ -20,7 +20,6 @@ func Run(ctx context.Context) error {
 
 	http.Handle("/", http.FileServer(http.Dir("web/views")))
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("web/css"))))
-	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("web/assets"))))
 	http.HandleFunc("/ws", handleUpdate)
 
 	go func() {

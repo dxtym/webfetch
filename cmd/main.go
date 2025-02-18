@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/dxtym/xifetch/internal/server"
+	"github.com/dxtym/webfetch/internal/server"
 )
 
 func main() {

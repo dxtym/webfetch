@@ -1,4 +1,4 @@
-module github.com/dxtym/xifetch
+module github.com/dxtym/webfetch
 
 go 1.23.5
 

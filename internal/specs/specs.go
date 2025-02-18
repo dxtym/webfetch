@@ -23,6 +23,9 @@ func GetHostInfo() (string, error) {
 		return out, err
 	}
 
+	host := hostInfo.Hostname
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#host">Host: %s</li>`, host)
+
 	osys := strings.Title(hostInfo.OS)
 	platform := strings.Title(hostInfo.Platform)
 	arch := hostInfo.KernelArch

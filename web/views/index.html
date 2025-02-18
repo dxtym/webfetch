@@ -2,22 +2,28 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/styles.css">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"></script>
 </head>
 
 <body>
-    <div hx-ext="ws" ws-connect="/update" class="overlay">
-        <ul>
-            <li id="os"></li>
-            <li id="uptime"></li>
-            <li id="mem"></li>
-            <li id="cpu"></li>
-        </ul>
+  <div class="canvas">
+    <pre>
+     {{ .Art }} 
+    </pre>
+    <div hx-ext="ws" ws-connect="/update">
+      <ul>
+        <li id="os"></li>
+        <li id="host"></li>
+        <li id="uptime"></li>
+        <li id="mem"></li>
+        <li id="cpu"></li>
+      </ul>
     </div>
+  </div>
 </body>
 
 </html>

@@ -29,8 +29,9 @@ func Run(ctx context.Context) error {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-
-		file, err := os.ReadFile("web/assets/art.txt")
+		
+		art := ctx.Value("art").(string)
+		file, err := os.ReadFile(art)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

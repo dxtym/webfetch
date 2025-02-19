@@ -3,7 +3,7 @@
 * {
   margin: 0;
   padding: 0;
-  color: gray;
+  color: #dddddd;
   font-size: medium;
   font-family: "Doto", serif;
 }
@@ -12,7 +12,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: black;
+  background-color: #000000;
 }
 
 .container {

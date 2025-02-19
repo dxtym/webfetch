@@ -9,11 +9,15 @@ import (
 )
 
 func main() {
+	art := flag.String("art", "web/assets/art.txt", "art to use")
 	port := flag.String("port", "6969", "port to use")
+
 	flag.Parse()
-	
-	c := context.Background()
-	ctx := context.WithValue(c, "port", *port)
+
+	var ctx context.Context
+	ctx = context.Background()
+	ctx = context.WithValue(ctx, "art", *art)
+	ctx = context.WithValue(ctx, "port", *port)
 
 	if err := server.Run(ctx); err != nil {
 		log.Fatalf("failed to run app: %s", err)

@@ -1,8 +1,8 @@
-
 package specs
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -31,6 +31,12 @@ func GetHostInfo() (string, error) {
 	arch := hostInfo.KernelArch
 	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#os">OS: %s %s %s</li>`, platform, osys, arch)
 
+	kernel := hostInfo.KernelVersion
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#kernel">Kernel: %s</li>`, kernel)
+
+	shell := os.Getenv("SHELL")
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#shell">Shell: %s</li>`, shell)
+
 	uptime := hostInfo.Uptime
 	duration := time.Duration(uptime) * time.Second
 	hours := int(duration.Hours()) % 24
@@ -47,7 +53,7 @@ func GetCpuInfo() (string, error) {
 		return out, err
 	}
 
-	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#cpu">CPU: %s</li>`, cpuInfo[0].ModelName)
+	out += fmt.Sprintf(`<li hx-swap-oob="innerHTML:#cpu">CPU: %s </li>`, cpuInfo[0].ModelName)
 
 	return out, nil
 }

@@ -1,5 +1,5 @@
 build:
-	@/snap/bin/go build -o bin/main cmd/main.go
+	@/snap/bin/go build -o tmp/main cmd/main.go
 
 run:
 	@/snap/bin/go run cmd/main.go

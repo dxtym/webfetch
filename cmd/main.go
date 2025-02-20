@@ -4,15 +4,25 @@ import (
 	"context"
 	"flag"
 	"log"
+	"os"
 
 	"github.com/dxtym/webfetch/internal/server"
+	"github.com/dxtym/webfetch/internal/utils"
 )
 
 func main() {
-	art := flag.String("art", "web/assets/art.txt", "art to use")
-	port := flag.String("port", "6969", "port to use")
+	var (
+		art  = flag.String("art", "web/assets/art.txt", "ascii art")
+		port = flag.String("port", "6969", "port number")
+		help = flag.Bool("help", false, "help message")
+	)
 
 	flag.Parse()
+
+	if *help {
+		utils.ShowHelp()
+		os.Exit(0)
+	}
 
 	var ctx context.Context
 	ctx = context.Background()

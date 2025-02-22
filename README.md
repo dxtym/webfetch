@@ -4,7 +4,7 @@ A neofetch alternative for web. Provides realtime specs. Also customizable.
 
 ### How to install?
 
-Soon!
+Install the latest [release](https://github.com/dxtym/webfetch/releases).
 
 ### How to use?
 
